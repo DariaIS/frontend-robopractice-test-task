@@ -9,6 +9,7 @@ export type dataType = {
 };
 
 export type userType = {
-    Fullname: string;
-    Days: string[];
+    Fullname: string,
+    Days: string[],
+    TotalTime: string
 };

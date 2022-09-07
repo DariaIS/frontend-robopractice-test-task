@@ -20,20 +20,35 @@ export const useUsersTable = (props: Props) => {
     };
 
     const byDays = (data: dataType[]): userType[] => {
-        const timeDiffer = (start: string, end: string) => {
-            let tempStart = new Date(0, 0, 0,
-                parseInt(start.split("-")[0], 10),
-                parseInt(start.split("-")[1], 10),
-                0, 0);
-            let tempEnd = new Date(0, 0, 0,
-                parseInt(end.split("-")[0], 10),
-                parseInt(end.split("-")[1], 10),
-                0, 0);
 
+        const getDate = (time: string) => new Date(0, 0, 0, parseInt(time.split("-")[0], 10), parseInt(time.split("-")[1], 10), 0, 0);
+
+        const timeDiffer = (start: string, end: string) => {
+            const [tempStart, tempEnd] = [getDate(start), getDate(end)];
             const milliseconds = Math.abs(tempEnd.getTime() - tempStart.getTime());
-            const minutes = Math.floor((milliseconds / 1000 / 60) % 60);
-            const hours = Math.floor((milliseconds / 1000 / 60 / 60) % 24);
+            
+            const [minutes, hours] = [
+                Math.floor((milliseconds / 1000 / 60) % 60),
+                Math.floor((milliseconds / 1000 / 60 / 60) % 24)
+            ]
             return `${hours}:${minutes}`;
+        }
+
+        const getTotalTime = (days: string[]) => {
+            let [hours, minutes] = [0, 0];
+            days.forEach(time => {
+                if (time !== '0') {
+                    hours += parseInt(time.split(":")[0], 10);
+                    minutes += parseInt(time.split(":")[1], 10);
+                }
+            })
+
+            const [resMinutes, resHours] = [
+                Math.floor(minutes % 60),
+                hours + Math.floor(minutes / 60)
+            ]
+            
+            return `${resHours}:${resMinutes}`;
         }
 
         return data.map((user): userType => {
@@ -46,7 +61,8 @@ export const useUsersTable = (props: Props) => {
 
             return {
                 Fullname: user.Fullname,
-                Days: days
+                Days: days,
+                TotalTime: getTotalTime(days)
             }
         })
     };
