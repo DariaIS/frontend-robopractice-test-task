@@ -3,7 +3,6 @@ import { ChangeEventHandler, useEffect, useMemo, useState } from 'react';
 import { userType } from '../../../../types';
 
 type Props = {
-    page: number,
     data: userType[]
 };
 
@@ -12,22 +11,27 @@ export const useUsersTable = (props: Props) => {
     const [slice, setSlice] = useState<userType[]>([]);
     const [rowsPerPage, setRowsPerPage] = useState('10');
     const [search, setSearch] = useState('');
+    const [page, setPage] = useState(1);
 
-    const [minRows, maxRows] = ['3', '15'];
+    const handleChangeSelect: ChangeEventHandler<HTMLSelectElement> = (e) => {
+        setRowsPerPage(e.target.value);
+    };
+
+    const handleClickPage = (direction: 'back' | 'forward') => {
+        switch (direction) {
+            case 'back':
+                setPage(prev => prev - 1);
+                break;
+            case 'forward':
+                setPage(prev => prev + 1);
+                break;
+            default:
+                break;
+        }
+    };
 
     const handleChangeInput: ChangeEventHandler<HTMLInputElement> = (e) => {
         setSearch(e.target.value);
-    };
-
-    const handleChangeRowsNum: ChangeEventHandler<HTMLInputElement> = (e) => {
-        const [value, min, max] = [e.target.value, e.target.min, e.target.max];
-        const newVal =
-            parseInt(value, 10) < parseInt(min, 10) && value !== ''
-                ? min
-                : parseInt(value, 10) > parseInt(max, 10)
-                    ? max
-                    : value;
-        setRowsPerPage(newVal);
     };
 
     const searchRows = (data: userType[], search: string) => {
@@ -55,27 +59,20 @@ export const useUsersTable = (props: Props) => {
     );
 
     useEffect(() => {
-        const range = calculateRange(
-            searchTable,
-            rowsPerPage !== '' ? rowsPerPage : minRows,
-        );
+        const range = calculateRange(searchTable, rowsPerPage);
         setRange(range);
 
-        const tempItems = sliceData(
-            searchTable,
-            props.page,
-            rowsPerPage !== '' ? rowsPerPage : minRows,
-        );
+        const tempItems = sliceData(searchTable, page, rowsPerPage);
         setSlice(tempItems);
-    }, [searchTable, search, props.page, rowsPerPage, minRows]);
+    }, [searchTable, search, page, rowsPerPage]);
 
     return {
         slice,
         range,
         rowsPerPage,
-        minRows,
-        maxRows,
+        page,
+        handleClickPage,
         handleChangeInput,
-        handleChangeRowsNum,
+        handleChangeSelect,
     };
 };

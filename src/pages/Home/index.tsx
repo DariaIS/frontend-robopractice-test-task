@@ -1,5 +1,5 @@
 import React from 'react';
-import { UsersTable } from "../../components/sections";
+import { UsersTable } from "./UsersTable";
 
 import { useFetch } from '../../hooks/useFetch';
 

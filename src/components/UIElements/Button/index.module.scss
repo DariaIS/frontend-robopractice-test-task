@@ -1,0 +1,13 @@
+.button {
+    text-decoration: none;
+    padding: 0.3rem 0.7rem;
+    font-size: 1.2rem;
+    border-radius: 1rem;
+    font-family: 'Roboto';
+
+    &:hover {
+        color: var(--white);
+        background-color: var(--color-primary);
+        text-decoration: none;
+    }
+}

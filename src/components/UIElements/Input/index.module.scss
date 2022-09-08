@@ -1,0 +1,38 @@
+.input {
+    appearance: button;
+    text-decoration: none;
+    background-color: #ffffff;
+    color: #000000;
+    padding: 0.25rem 0.65rem;
+    border-radius: 0.15rem;
+    border: 1px solid #282c34;
+    outline: none;
+    font-family: 'Roboto';
+    box-sizing: border-box;
+
+    @media (max-width: (600px)) {
+        width: 100px;
+    }
+
+    &:hover {
+        color: initial;
+        text-decoration: none;
+    }
+}
+
+// .input {
+//   outline: none;
+//   font-family: 'Roboto';
+//   border: 1px solid var(--gray-light);
+//   padding: 1rem 1.5rem;
+//   border-radius: 10px;
+//   font-size: 1.2rem;
+
+//   @media (min-width: 575px) {
+//       width: 300px;
+//   }
+
+//   @media (max-width: (575px - 1px)) {
+//       width: 100%;
+//   }
+// }
