@@ -9,14 +9,14 @@ import { useUsersTable } from './hooks';
 type Props = {
     data: userType[],
     firstCol: {
-        key: string,
+        key: keyof userType,
         value: string
     },
     cols: {
-        key: string,
+        key: keyof userType,
         value: string[]
     },
-    lastCol: string
+    lastCol: keyof userType
 };
 
 export const UsersTable: React.FC<Props> = ({ data, firstCol, cols, lastCol }) => {
@@ -25,9 +25,11 @@ export const UsersTable: React.FC<Props> = ({ data, firstCol, cols, lastCol }) =
         range,
         rowsPerPage,
         page,
+        sortConfig,
         handleClickPage,
         handleChangeInput,
-        handleChangeSelect
+        handleChangeSelect,
+        requestSort
     } = useUsersTable({ data });
 
     return (
@@ -41,17 +43,17 @@ export const UsersTable: React.FC<Props> = ({ data, firstCol, cols, lastCol }) =
                     <table>
                         <thead>
                             <tr>
-                                <th>
+                                <th onClick={() => requestSort(firstCol.key, null)}>
                                     {firstCol.value}
                                 </th>
                                 {
                                     cols.value.map((col, index) => (
-                                        <th key={index}>
+                                        <th key={index} onClick={() => requestSort(cols.key, parseInt(col, 10))}>
                                             {col}
                                         </th>
                                     ))
                                 }
-                                <th>
+                                <th onClick={() => requestSort(lastCol, null)}>
                                     {lastCol}
                                 </th>
                             </tr>
@@ -62,10 +64,10 @@ export const UsersTable: React.FC<Props> = ({ data, firstCol, cols, lastCol }) =
                                     <tr key={index}>
                                         <>
                                             <td>
-                                                {user[firstCol.key as (keyof typeof user)]}
+                                                {user[firstCol.key]}
                                             </td>
                                             {
-                                                user[cols.key as (keyof typeof user)].toString().split(',').map((day, i) => (
+                                                user[cols.key].toString().split(',').map((day, i) => (
                                                     day !== '' &&
                                                     <td key={i}>
                                                         {day}
@@ -73,7 +75,7 @@ export const UsersTable: React.FC<Props> = ({ data, firstCol, cols, lastCol }) =
                                                 ))
                                             }
                                             <td>
-                                                {user[lastCol as (keyof typeof user)]}
+                                                {user[lastCol]}
                                             </td>
                                         </>
                                     </tr>
