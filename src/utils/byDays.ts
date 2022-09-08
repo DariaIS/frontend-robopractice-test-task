@@ -1,4 +1,4 @@
-import { userType, dataType } from '../../../../types';
+import { userType, dataType } from '../types';
 
 export const byDays = (data: dataType[]): userType[] => {
 

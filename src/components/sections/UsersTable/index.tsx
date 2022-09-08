@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
 
 import { useUsersTable } from './hooks';
+import { userType } from '../../../types';
 // import styles from './index.module.scss';
 
 type Props = {
+    data: userType[],
     firstCol: {
         key: string,
         value: string
     },
-    cols: string[],
+    cols: {
+        key: string,
+        value: string[]
+    },
     lastCol: string
 };
 
-export const UsersTable: React.FC<Props> = ({ firstCol, cols, lastCol }) => {
+export const UsersTable: React.FC<Props> = ({ data, firstCol, cols, lastCol }) => {
     const [page, setPage] = useState(1);
     const {
         slice,
@@ -22,7 +27,7 @@ export const UsersTable: React.FC<Props> = ({ firstCol, cols, lastCol }) => {
         maxRows,
         handleChangeInput,
         handleChangeRowsNum,
-    } = useUsersTable({ page });
+    } = useUsersTable({ data, page });
 
     return (
         <div className='pageContainer section'>
@@ -30,31 +35,51 @@ export const UsersTable: React.FC<Props> = ({ firstCol, cols, lastCol }) => {
                 name={firstCol.key}
                 onChange={(e) => handleChangeInput(e)}
             />
-            <table>
-                <thead>
-                    <tr>
-                        <th>
-                            {firstCol.value}
-                        </th>
+            {slice.length !== 0 && (
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                {firstCol.value}
+                            </th>
+                            {
+                                cols.value.map((col, index) => (
+                                    <th key={index}>
+                                        {col}
+                                    </th>
+                                ))
+                            }
+                            <th>
+                                {lastCol}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         {
-                            cols.map((col, index) => (
-                                <th key={index}>
-                                    {col}
-                                </th>
+                            slice.map((user, index) => (
+                                <tr key={index}>
+                                    <>
+                                        <td>
+                                            {user[firstCol.key as (keyof typeof user)]}
+                                        </td>
+                                        {
+                                            user[cols.key as (keyof typeof user)].toString().split(',').map((day, i) => (
+                                                day !== '' &&
+                                                <td key={i}>
+                                                    {day}
+                                                </td>
+                                            ))
+                                        }
+                                        <td>
+                                            {user[lastCol as (keyof typeof user)]}
+                                        </td>
+                                    </>
+                                </tr>
                             ))
                         }
-                        <th>
-                            {lastCol}
-                        </th>
-                    </tr>
-                </thead>
-                {slice.length !== 0 && (
-                    <tbody>
-
                     </tbody>
-                )}
-                {/* {console.log('new data', slice)} */}
-            </table>
+                </table>
+            )}
         </div>
     );
 };

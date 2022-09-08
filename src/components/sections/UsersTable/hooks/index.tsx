@@ -1,14 +1,13 @@
 import { ChangeEventHandler, useEffect, useMemo, useState } from 'react';
 
-import { byDays } from './byDays';
 import { userType } from '../../../../types';
 
 type Props = {
-    page: number;
+    page: number,
+    data: userType[]
 };
 
 export const useUsersTable = (props: Props) => {
-    const [data, setData] = useState<userType[]>([]);
     const [range, setRange] = useState(0);
     const [slice, setSlice] = useState<userType[]>([]);
     const [rowsPerPage, setRowsPerPage] = useState('10');
@@ -51,21 +50,9 @@ export const useUsersTable = (props: Props) => {
     };
 
     const searchTable: userType[] = useMemo(
-        () => searchRows(data, search),
-        [search, data],
+        () => searchRows(props.data, search),
+        [search, props.data],
     );
-
-    useEffect(() => {
-        fetch('http://localhost:8080/api/users')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error occurred!')
-                }
-                return response.json()
-            })
-            .then(data => setData(byDays(data)))
-            .catch(err => console.log(err))
-    }, []);
 
     useEffect(() => {
         const range = calculateRange(
