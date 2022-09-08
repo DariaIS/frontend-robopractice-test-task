@@ -2,21 +2,25 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+
+let isDev = true;
+let mode = 'development';
+let target = 'web';
+if (process.env.NODE_ENV === 'production') {
+    mode = 'production';
+    isDev = false;
+    target = 'browserslist';
+}
+
 const plugins = [
     new HtmlWebpackPlugin({
         template: './src/index.html',
     }),
     new MiniCssExtractPlugin({
-        filename: '[name].[contenthash].css',
+        filename: isDev ? '[name].css' : '[name].[hash].css',
+        chunkFilename: isDev ? '[id].css' : '[id].[hash].css'
     }),
 ];
-
-let mode = 'development';
-let target = 'web';
-if (process.env.NODE_ENV === 'production') {
-    mode = 'production';
-    target = 'browserslist';
-}
 
 module.exports = {
     mode,
@@ -37,12 +41,33 @@ module.exports = {
         rules: [
             { test: /\.(html)$/, use: ['html-loader'] },
             {
-                test: /\.(s[ac]|c)ss$/i,
+                test: /\.s(a|c)ss$/i,
                 use: [
-                    MiniCssExtractPlugin.loader,
+                    isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
                     'css-loader',
                     'postcss-loader',
                     'sass-loader',
+                ],
+            },
+            {
+                test: /\.module\.s(a|c)ss$/,
+                exclude: /\.module.(s(a|c)ss)$/,
+                use: [
+                    isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: true,
+                            sourceMap: isDev
+                        }
+                    },
+                    'postcss-loader',
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: isDev
+                        }
+                    }
                 ],
             },
             {
@@ -81,6 +106,6 @@ module.exports = {
         ],
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js', '.jsx'],
+        extensions: ['.tsx', '.ts', '.js', '.jsx', '.scss'],
     },
 }
