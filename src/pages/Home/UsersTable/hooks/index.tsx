@@ -1,5 +1,7 @@
 import { ChangeEventHandler, useEffect, useMemo, useState } from 'react';
 
+import { getFilter } from '../../../../utils';
+
 import { userType } from '../../../../types';
 
 type Props = {
@@ -8,8 +10,8 @@ type Props = {
 
 type ISortConfig = {
     key: keyof userType | null,
-    day: number | null,
-    direction: string | null;
+    day: 'total' | number | null,
+    direction: 'ascending' | 'descending' | null;
 };
 
 export const useUsersTable = (props: Props) => {
@@ -65,8 +67,8 @@ export const useUsersTable = (props: Props) => {
         );
     };
 
-    const requestSort = (key: keyof userType, day: number | null) => {
-        let direction = 'ascending';
+    const requestSort = (key: keyof userType, day: 'total' | number | null = null) => {
+        let direction: 'ascending' | 'descending' = 'ascending';
         if (sortConfig && sortConfig.key === key && sortConfig.direction === 'ascending') {
             direction = 'descending';
         }
@@ -74,28 +76,41 @@ export const useUsersTable = (props: Props) => {
     }
 
     const sorting = (data: userType[]) => {
+        const compareTimes = (a: string, b: string, direction: 'ascending' | 'descending' | null) => {
+            const [hoursA, minutesA, hoursB, minutesB] = [
+                parseInt(a.split(":")[0], 10) || 0,
+                parseInt(a.split(":")[1], 10) || 0,
+                parseInt(b.split(":")[0], 10) || 0,
+                parseInt(b.split(":")[1], 10) || 0
+            ]
+            if (hoursA < hoursB)
+                return getFilter(direction, '<');
+            if (hoursA > hoursB)
+                return getFilter(direction, '>');
+            if (minutesA < minutesB)
+                return getFilter(direction, '<');
+            if (minutesA > minutesB)
+                return getFilter(direction, '>');
+            return 0;
+        }
+
         let sortableItems = [...data];
         if (sortConfig !== null) {
             sortableItems.sort((a, b) => {
                 if (sortConfig.key) {
-                    let newA: string | string[] = '';
-                    let newB: string | string[] = '';
                     switch (sortConfig.day) {
                         case null:
-                            [newA, newB] = [a[sortConfig.key], b[sortConfig.key]]
+                            if (a[sortConfig.key] < b[sortConfig.key])
+                                return getFilter(sortConfig.direction, '<');
+                            if (a[sortConfig.key] > b[sortConfig.key])
+                                return getFilter(sortConfig.direction, '>');
                             break;
-
+                        case 'total':
+                            return compareTimes(a[sortConfig.key].toString(), b[sortConfig.key].toString(), sortConfig.direction);
                         default:
-                            [newA, newB] = [
-                                a[sortConfig.key][sortConfig.day],
-                                b[sortConfig.key][sortConfig.day]
-                            ]
-                            break;
+                            return compareTimes(a[sortConfig.key][sortConfig.day], b[sortConfig.key][sortConfig.day], sortConfig.direction);
                     }
-                    if (newA < newB)
-                        return sortConfig.direction === 'ascending' ? -1 : 1;
-                    if (newA > newB)
-                        return sortConfig.direction === 'ascending' ? 1 : -1;
+
                 }
                 return 0;
             });

@@ -43,7 +43,7 @@ export const UsersTable: React.FC<Props> = ({ data, firstCol, cols, lastCol }) =
                     <table>
                         <thead>
                             <tr>
-                                <th onClick={() => requestSort(firstCol.key, null)}>
+                                <th onClick={() => requestSort(firstCol.key)}>
                                     {firstCol.value}
                                 </th>
                                 {
@@ -53,7 +53,7 @@ export const UsersTable: React.FC<Props> = ({ data, firstCol, cols, lastCol }) =
                                         </th>
                                     ))
                                 }
-                                <th onClick={() => requestSort(lastCol, null)}>
+                                <th onClick={() => requestSort(lastCol, 'total')}>
                                     {lastCol}
                                 </th>
                             </tr>
