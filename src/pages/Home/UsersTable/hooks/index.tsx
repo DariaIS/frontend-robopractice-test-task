@@ -96,6 +96,7 @@ export const useUsersTable = (props: Props) => {
 
         let sortableItems = [...data];
         if (sortConfig !== null) {
+            setPage(1);
             sortableItems.sort((a, b) => {
                 if (sortConfig.key) {
                     switch (sortConfig.day) {
@@ -119,7 +120,10 @@ export const useUsersTable = (props: Props) => {
     }
 
     const searchTable: userType[] = useMemo(
-        () => searchRows(sorting(props.data), search),
+        () => {
+            setPage(1);
+            return searchRows(sorting(props.data), search)
+        },
         [search, props.data, sortConfig],
     );
 
@@ -132,6 +136,7 @@ export const useUsersTable = (props: Props) => {
     }, [searchTable, search, page, rowsPerPage]);
 
     return {
+        searchTable,
         slice,
         range,
         rowsPerPage,

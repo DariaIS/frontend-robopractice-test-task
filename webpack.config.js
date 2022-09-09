@@ -41,17 +41,23 @@ module.exports = {
         rules: [
             { test: /\.(html)$/, use: ['html-loader'] },
             {
-                test: /\.s(a|c)ss$/i,
+                test: /\.s?css$/,
+                exclude: /\.module.(s(a|c)ss)$/,
                 use: [
                     isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
                     'css-loader',
                     'postcss-loader',
                     'sass-loader',
+                    {
+                        loader: 'sass-resources-loader',
+                        options: {
+                            resources: path.join(__dirname, './src/styles/variables.scss')
+                        }
+                    }
                 ],
             },
             {
-                test: /\.module\.s(a|c)ss$/,
-                exclude: /\.module.(s(a|c)ss)$/,
+                test: /\.module\.s?css$/,
                 use: [
                     isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
                     {
@@ -65,7 +71,13 @@ module.exports = {
                     {
                         loader: 'sass-loader',
                         options: {
-                            sourceMap: isDev
+                            sourceMap: isDev,
+                        }
+                    },
+                    {
+                        loader: 'sass-resources-loader',
+                        options: {
+                            resources: path.join(__dirname, './src/styles/variables.scss')
                         }
                     }
                 ],
@@ -108,7 +120,7 @@ module.exports = {
     resolve: {
         alias: {
             '@src': path.join(__dirname, '/src'),
-            '@types': path.join(__dirname, '/src/types.ts'),
+            '@styles': path.join(__dirname, '/src/styles'),
             '@UIElements': path.join(__dirname, '/src/components/UIElements'),
             '@sections': path.join(__dirname, '/src/components/sections'),
             '@utils': path.join(__dirname, '/src/utils'),

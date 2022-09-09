@@ -21,6 +21,7 @@ type Props = {
 
 export const UsersTable: React.FC<Props> = ({ data, firstCol, cols, lastCol }) => {
     const {
+        searchTable,
         slice,
         range,
         rowsPerPage,
@@ -84,7 +85,7 @@ export const UsersTable: React.FC<Props> = ({ data, firstCol, cols, lastCol }) =
                         </tbody>
                     </table>
                     <Pagination
-                        numOfRows={data.length}
+                        numOfRows={searchTable.length}
                         rowsPerPage={rowsPerPage}
                         range={range}
                         page={page}
