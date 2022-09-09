@@ -106,6 +106,15 @@ module.exports = {
         ],
     },
     resolve: {
+        alias: {
+            '@src': path.join(__dirname, '/src'),
+            '@types': path.join(__dirname, '/src/types.ts'),
+            '@UIElements': path.join(__dirname, '/src/components/UIElements'),
+            '@sections': path.join(__dirname, '/src/components/sections'),
+            '@utils': path.join(__dirname, '/src/utils'),
+            '@pages': path.join(__dirname, '/src/pages'),
+            '@hooks': path.join(__dirname, '/src/hooks'),
+        },
         extensions: ['.tsx', '.ts', '.js', '.jsx', '.scss'],
     },
 }

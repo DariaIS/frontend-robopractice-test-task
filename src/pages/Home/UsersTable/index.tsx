@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
-import { userType } from '../../../types';
+import { userType } from '@src/types';
 
-import { Pagination } from '../../../components/sections';
+import { Pagination } from '@sections';
 
 import { useUsersTable } from './hooks';
 

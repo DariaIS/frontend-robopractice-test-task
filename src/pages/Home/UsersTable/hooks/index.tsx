@@ -1,8 +1,8 @@
 import { ChangeEventHandler, useEffect, useMemo, useState } from 'react';
 
-import { getFilter } from '../../../../utils';
+import { getFilter } from '@utils';
 
-import { userType } from '../../../../types';
+import { userType } from '@src/types';
 
 type Props = {
     data: userType[]

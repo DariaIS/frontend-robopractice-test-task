@@ -1,7 +1,7 @@
 import React from 'react';
 import { UsersTable } from "./UsersTable";
 
-import { useFetch } from '../../hooks/useFetch';
+import { useFetch } from '@hooks';
 
 export const Home: React.FC = () => {
     const { data } = useFetch();
