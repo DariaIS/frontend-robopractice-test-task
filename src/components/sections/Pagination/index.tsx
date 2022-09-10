@@ -1,6 +1,6 @@
 import React, { ChangeEventHandler } from 'react';
 
-import { Button } from "../../UIElements";
+import { Button } from "@UIElements";
 
 type Props = {
     numOfRows: number,

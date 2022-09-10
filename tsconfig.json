@@ -21,6 +21,15 @@
             "./node_modules/@types",
             "./src/@types"
         ],
+        "paths": {
+            "@src/*": ["src/*"],
+            "@styles/*": ["src/styles/*"],
+            "@UIElements": ["src/components/UIElements"],
+            "@sections": ["src/components/sections"],
+            "@utils": ["src/utils"],
+            "@pages": ["src/pages"],
+            "@hooks": ["src/hooks"],
+        },
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
         "importsNotUsedAsValues": "preserve",
