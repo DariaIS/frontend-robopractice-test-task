@@ -6,8 +6,8 @@
     font-family: 'Roboto';
 
     &:hover {
-        color: var(--white);
-        background-color: var(--color-primary);
+        color: $white;
+        background-color: $color-primary;
         text-decoration: none;
     }
 }

@@ -1,7 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
+const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 
 let isDev = true;
 let mode = 'development';
@@ -63,8 +63,10 @@ module.exports = {
                     {
                         loader: 'css-loader',
                         options: {
-                            modules: true,
-                            sourceMap: isDev
+                            sourceMap: isDev,
+                            modules: {
+                                getLocalIdent: getCSSModuleLocalIdent
+                            }
                         }
                     },
                     'postcss-loader',
