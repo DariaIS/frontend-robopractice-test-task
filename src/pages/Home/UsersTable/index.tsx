@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
-import { userType } from '../../../types';
+import { userType } from '@src/types';
 
-import { Pagination } from '../../../components/sections';
+import { Pagination } from '@sections';
 
 import { useUsersTable } from './hooks';
 
@@ -21,6 +21,7 @@ type Props = {
 
 export const UsersTable: React.FC<Props> = ({ data, firstCol, cols, lastCol }) => {
     const {
+        searchTable,
         slice,
         range,
         rowsPerPage,
@@ -43,7 +44,7 @@ export const UsersTable: React.FC<Props> = ({ data, firstCol, cols, lastCol }) =
                     <table>
                         <thead>
                             <tr>
-                                <th onClick={() => requestSort(firstCol.key, null)}>
+                                <th onClick={() => requestSort(firstCol.key)}>
                                     {firstCol.value}
                                 </th>
                                 {
@@ -53,7 +54,7 @@ export const UsersTable: React.FC<Props> = ({ data, firstCol, cols, lastCol }) =
                                         </th>
                                     ))
                                 }
-                                <th onClick={() => requestSort(lastCol, null)}>
+                                <th onClick={() => requestSort(lastCol, 'total')}>
                                     {lastCol}
                                 </th>
                             </tr>
@@ -84,7 +85,7 @@ export const UsersTable: React.FC<Props> = ({ data, firstCol, cols, lastCol }) =
                         </tbody>
                     </table>
                     <Pagination
-                        numOfRows={data.length}
+                        numOfRows={searchTable.length}
                         rowsPerPage={rowsPerPage}
                         range={range}
                         page={page}
